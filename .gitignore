@@ -1,3 +1,4 @@
 gen/
 *.swp
 _hidden_settings.py
+client/search.js

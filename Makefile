@@ -24,5 +24,8 @@ gen/zadaci-words: gen/zadaci-txt
 gen/index.json: gen/zadaci-words
 	node build-index.js > gen/index.json
 
+client/search.js: gen/index.json client/search.template.js
+	cat client/search.template.js gen/index.json > client/search.js
+
 clean:
-	rm -rf gen
+	rm -rf gen client/search.js
