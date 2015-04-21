@@ -1,0 +1,20 @@
+<h1>search debug-fe</h1>
+<script src="search.js" type="text/javascript"></script>
+
+<input type="text" id="query" autocomplete="off" autofocus/>
+
+<br/>
+<div id="results">
+</div>
+
+<script>
+// self executing function here
+(function() {
+  var elem_text = document.getElementById("query");
+  var elem_results = document.getElementById("results");
+  elem_text.addEventListener("keyup", function (evt) {
+    elem_results.innerHTML =
+      Search.search(evt.target.value).join("<br/>");
+  });
+})();
+</script>

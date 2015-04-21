@@ -50,6 +50,17 @@ function finalizeIndex() {
   process.stdout.write(JSON.stringify(result));
 }
 
+function splitPathParts(id_parts) {
+  var result = [];
+  for (var i = 0; i < id_parts.length; ++i) {
+    var splitted = id_parts[i].split("_");
+    for (var j = 0; j < splitted.length; ++j) {
+      result.push(splitted[j]);
+    }
+  }
+  return result;
+}
+
 function main() {
   var dir = fs.readdirSync(inDir);
   for (var i = 0; i < dir.length; ++i) {
@@ -60,7 +71,9 @@ function main() {
     var task_name = id_parts[id_parts.length -1];
     var words = fs.readFileSync(path).toString().split(/\s/).slice(0, -1);
     indexToId.push(id);
-    addWords(i, {name: [task_name], path: id_parts, word: words});
+    addWords(i, {name: [task_name],
+                 path: splitPathParts(id_parts),
+                 word: words});
   }
   finalizeIndex();
 }

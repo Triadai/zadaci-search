@@ -1,3 +1,5 @@
+all: client/search.js
+
 directory_tree_builder:
 	( git submodule init && git submodule update )
 	( cd directory_tree_builder && git submodule init && git submodule update )
@@ -8,20 +10,20 @@ croatian-helper:
 	( git submodule init && git submodule update )
 	( cd croatian-helper/lib && npm install )
 
-gen/zadaci-pdf: directory_tree_builder
+gen/zadaci-pdf: directory_tree_builder build-directory.py
 	python build-directory.py
 
-gen/zadaci-txt: gen/zadaci-pdf croatian-helper
+gen/zadaci-txt: gen/zadaci-pdf croatian-helper pdf-to-txt.sh
 	./pdf-to-txt.sh
 
-gen/zadaci-words: gen/zadaci-txt
+gen/zadaci-words: gen/zadaci-txt txt-to-words.js
 	rm -rf gen/zadaci-words;\
 	mkdir -p gen/zadaci-words;\
 	for i in $$(ls gen/zadaci-txt); do\
 		node txt-to-words.js gen/zadaci-txt/$$i > gen/zadaci-words/$$i;\
 	done
 	
-gen/index.json: gen/zadaci-words
+gen/index.json: gen/zadaci-words build-index.js
 	node build-index.js > gen/index.json
 
 client/search.js: gen/index.json client/search.template.js
