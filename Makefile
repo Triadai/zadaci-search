@@ -4,11 +4,25 @@ directory_tree_builder:
 	[ -f _hidden_settings.py ] &&\
 	 	cp _hidden_settings.py directory_tree_builder/spreadsheet_parser/
 
-gen-zadaci-pdf: directory_tree_builder
+croatian-helper:
+	( git submodule init && git submodule update )
+	( cd croatian-helper/lib && npm install )
+
+gen/zadaci-pdf: directory_tree_builder
 	python build-directory.py
+
+gen/zadaci-txt: gen/zadaci-pdf croatian-helper
+	./pdf-to-txt.sh
+
+gen/zadaci-words: gen/zadaci-txt
+	rm -rf gen/zadaci-words;\
+	mkdir -p gen/zadaci-words;\
+	for i in $$(ls gen/zadaci-txt); do\
+		node txt-to-words.js gen/zadaci-txt/$$i > gen/zadaci-words/$$i;\
+	done
 	
-index.js:
-	python 
+gen/index.json: gen/zadaci-words
+	node build-index.js > gen/index.json
 
 clean:
-	rm -rf directory_tree_builder gen-zadaci-pdf
+	rm -rf gen
