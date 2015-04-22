@@ -1,6 +1,6 @@
 all: client/search.js
 
-directory_tree_builder:
+directory_tree_builder/spreadsheet_parser/_hidden_settings.py:
 	( git submodule init && git submodule update )
 	( cd directory_tree_builder && git submodule init && git submodule update )
 	[ -f _hidden_settings.py ] &&\
@@ -10,7 +10,7 @@ croatian-helper:
 	( git submodule init && git submodule update )
 	( cd croatian-helper/lib && npm install )
 
-gen/zadaci-pdf: directory_tree_builder build-directory.py
+gen/zadaci-pdf: directory_tree_builder/spreadsheet_parser/_hidden_settings.py build-directory.py
 	python build-directory.py
 
 gen/zadaci-txt: gen/zadaci-pdf croatian-helper pdf-to-txt.sh
