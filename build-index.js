@@ -52,7 +52,7 @@ function finalizeIndex() {
 
 function splitPathParts(id_parts) {
   var result = [];
-  for (var i = 0; i < id_parts.length; ++i) {
+  for (var i = 0; i < id_parts.length - 1; ++i) {
     var splitted = id_parts[i].split("_");
     for (var j = 0; j < splitted.length; ++j) {
       result.push(splitted[j]);
@@ -67,12 +67,12 @@ function main() {
     var filename = dir[i];
     var path = inDir + "/" + filename;
     var id = filename.substr(0, filename.length - 4);
-    var id_parts = id.split("-");
-    var task_name = id_parts[id_parts.length -1];
+    var id_parts = id.split("@");
+    var task_name = id_parts[id_parts.length -1].substr(3);
     var words = fs.readFileSync(path).toString().split(/\s/).slice(0, -1);
     indexToId.push(id.replace(/@/g, "/"));
     addWords(i, {name: [task_name],
-                 path: splitPathParts(id_parts),
+                 path: splitPathParts(id_parts.slice(0, -1)),
                  word: words});
   }
   finalizeIndex();
