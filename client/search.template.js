@@ -10,7 +10,7 @@ Search.internal = {};
 
 Search.internal.tokenizeQuery = function (query) {
   return query.split(/\s/).filter(function (word) {
-    return word.length > 0;
+    return word.length > 1;
   });
 };
 
