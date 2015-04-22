@@ -80,11 +80,24 @@ Search.internal.resultOr = function (res1, res2) {
   return result;
 };
 
+Search.internal.resultScale = function (res1, scale) {
+  var result = {};
+  for (var task_index in res1) {
+    result[task_index] = scale * res1[task_index];
+  }
+  return result;
+}
+
 Search.internal.getMatchesForWord = function (word, is_last) {
   var result = {},
       equal_range = Search.internal.getWordIndexRange(word, is_last);
   for (var i = equal_range[0]; i < equal_range[1]; ++i) {
     result = Search.internal.resultOr(result, Search.data.words_values[i]);
+    // For exact match scale points with 2.
+    // ("anton" ~~ "anton", "anton" ~ "antonio")
+    if (i == equal_range[0]) {
+      result = Search.internal.resultScale(result, 2);
+    }
   }
   return result;
 };
