@@ -9,9 +9,12 @@ Search.search = function (query, max_items) {
 Search.internal = {};
 
 Search.internal.tokenizeQuery = function (query) {
-  return query.split(/\s/).filter(function (word) {
-    return word.length > 1;
-  });
+  return query.split(/\s/)
+    .filter(function (word) {
+      return word.length > 1;
+    })
+    .map(Search.croatianHelper.toAscii)
+    .map(Search.croatianHelper.toLower);
 };
 
 /**
@@ -131,4 +134,3 @@ Search.internal.rankAndFinalize = function (matches, max_items) {
   });
 };
 
-Search.data = /* index.json goes here: */

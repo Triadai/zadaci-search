@@ -29,7 +29,11 @@ gen/index.json: gen/zadaci-words build-index.js
 	node build-index.js > gen/index.json
 
 client/search.js: gen/index.json client/search.template.js
-	cat client/search.template.js gen/index.json > client/search.js
+	cat client/search.template.js > client/search.js
+	cat croatian-helper/lib/croatian-helper.js |\
+		sed 's/module\.exports/Search.croatianHelper/g' >> client/search.js
+	echo "Search.data = " >> client/search.js
+	cat gen/index.json >> client/search.js
 
 clean:
 	rm -rf gen client/search.js
