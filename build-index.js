@@ -68,11 +68,11 @@ function main() {
     var path = inDir + "/" + filename;
     var id = filename.substr(0, filename.length - 4);
     var id_parts = id.split("@");
-    var task_name = id_parts[id_parts.length -1].substr(3);
+    var task_name = id_parts[id_parts.length - 1].substr(3);
     var words = fs.readFileSync(path).toString().split(/\s/).slice(0, -1);
     indexToId.push(id.replace(/@/g, "/"));
     addWords(i, {name: [task_name],
-                 path: splitPathParts(id_parts.slice(0, -1)),
+                 path: splitPathParts(id_parts),
                  word: words});
   }
   finalizeIndex();
