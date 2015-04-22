@@ -11,9 +11,11 @@ croatian-helper:
 	( cd croatian-helper/lib && npm install )
 
 gen/zadaci-pdf: directory_tree_builder/spreadsheet_parser/_hidden_settings.py build-directory.py
+	rm -rf gen/zadaci-pdf
 	python build-directory.py
 
 gen/zadaci-txt: gen/zadaci-pdf croatian-helper pdf-to-txt.sh
+	rm -rf gen/zadaci-txt
 	./pdf-to-txt.sh
 
 gen/zadaci-words: gen/zadaci-txt txt-to-words.js
