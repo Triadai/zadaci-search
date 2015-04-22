@@ -70,7 +70,7 @@ function main() {
     var id_parts = id.split("-");
     var task_name = id_parts[id_parts.length -1];
     var words = fs.readFileSync(path).toString().split(/\s/).slice(0, -1);
-    indexToId.push(id);
+    indexToId.push(id.replace(/@/g, "/"));
     addWords(i, {name: [task_name],
                  path: splitPathParts(id_parts),
                  word: words});
