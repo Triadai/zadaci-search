@@ -28,11 +28,18 @@ gen/zadaci-words: gen/zadaci-txt txt-to-words.js
 gen/index.js: gen/zadaci-words build-index.js
 	node build-index.js > gen/index.js
 
-gen/search.js: gen/index.js client/search.js
+gen/search.js: gen/index.js client/search.js client/result.js
 	cat client/search.js > gen/search.js
+	cat client/result.js >> gen/search.js
 	cat croatian-helper/lib/croatian-helper.js |\
 		sed 's/module\.exports/Search.croatianHelper/g' >> gen/search.js
 	cat gen/index.js >> gen/search.js
+
+test: gen/search.js
+	rm -rf gen/test.js
+	cat gen/search.js >> gen/test.js
+	echo 'console.log(Search.search("mrav"));' >> gen/test.js
+	node gen/test.js
 
 clean:
 	rm -rf gen client/search.js

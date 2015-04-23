@@ -25,6 +25,17 @@ function addWords(task_index, words_by_level) {
   }
 }
 
+function flattenResult(result) {
+  var keys = Object.keys(result).map(Number);
+  var flatten = Array(keys.length * 2);
+  keys.sort(function (a, b) {return a - b;});
+  for (var i = 0; i < keys.length * 2; i+=2) {
+    flatten[i] = Number(keys[i / 2]);
+    flatten[i + 1] = Number(result[keys[i / 2]]);
+  }
+  return flatten;
+}
+
 /**
  * indexToId[test_id] = task_key;
  *  example:
@@ -34,10 +45,12 @@ function addWords(task_index, words_by_level) {
  * words_values[] is array with same indicies as words_keys but with
  * occurrences of words in tasks. for example:
  * words_keys: ["foo", "bar", "baz"]
- * words_values: [ { '0': 5, '1': 5 }, { '1': 1 }, { '1': 1 } ]
+ * words_values: [ [0, 5, 1, 5], [1, 1], [1, 1] ]
  *
  * This means that word foo is present in first two tasks with weight 5. Word
  * bar and baz are present in second task with weight 1.
+ * Each array element in words_values has even length. 2 * k indices are task
+ * indexes, while 2 * k + 1 indices are weight.
  */
 function finalizeIndex() {
   var result = {};
@@ -45,7 +58,8 @@ function finalizeIndex() {
   result["words_keys"] = Object.keys(wordsIndex).sort();
   result["words_values"] = [];
   for (var i = 0; i < result.words_keys.length; ++i) {
-    result["words_values"].push(wordsIndex[result.words_keys[i]]);
+    result["words_values"].push(
+        flattenResult(wordsIndex[result.words_keys[i]]));
   }
   process.stdout.write("Search.data = ");
   process.stdout.write(JSON.stringify(result));
