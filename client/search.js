@@ -27,7 +27,7 @@ Search.impl.tokenizeQuery = function (query) {
   return query.split(/\s/)
     .map(Search.impl.sanitizeWord)
     .filter(function (word) {
-      return word.length > 1;
+      return word.length > 0;
     });
 };
 
@@ -75,14 +75,14 @@ Search.impl.getWordIndexRange = function (word, is_last) {
 Search.impl.getMatchesForWord = function (word, is_last) {
   var result = [],
       equal_range = Search.impl.getWordIndexRange(word, is_last);
-  for (var i = equal_range[0]; i < equal_range[1]; ++i) {
-    result = Search.impl.resultOr(result, Search.data.words_values[i]);
-    // For exact match scale points with 2.
-    // ("anton" ~~ "anton", "anton" ~ "antonio")
-    if (i == equal_range[0]) {
-      result = Search.impl.resultScale(result, 2);
-    }
+  if (equal_range[0] >= equal_range[1]) {
+    return result;
   }
+  result = Search.tree.query(equal_range[0], equal_range[1]);
+  // Award exact match more points.
+  // ("anton" ~~ "anton", "anton" ~ "antonio")
+  result = Search.impl.resultOr(result,
+      Search.data.words_values[equal_range[0]]);
   return result;
 };
 

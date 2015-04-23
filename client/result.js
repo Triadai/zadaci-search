@@ -10,7 +10,6 @@
  *
  * operations that can be done on result are logical OR and AND.
  */
-
 var Search = Search || {};
 Search.impl = Search.impl || {};
 
@@ -50,6 +49,12 @@ Search.impl.resultAnd = function (lhs, rhs) {
  * element wise sum of two results.
  */
 Search.impl.resultOr = function (lhs, rhs) {
+  if (lhs == undefined && rhs == undefined) {
+    return [];
+  }
+  if (rhs == undefined) {
+    return lhs;
+  }
   var result = Array(lhs.length + rhs.length);
   var lhs_pos = 0, rhs_pos = 0, result_pos = 0;
   while (lhs_pos < lhs.length || rhs_pos < rhs.length) {
@@ -109,7 +114,7 @@ Search.impl.resultOrder = function (lhs, max_items) {
   });
 };
 
-if ("process" in this) {
+if (typeof module !== "undefined") {
   var impl = Search.impl;
   function assert_eq(a, b) {
     a = JSON.stringify(a);
