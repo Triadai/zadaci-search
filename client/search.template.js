@@ -2,19 +2,31 @@ var Search = Search || {};
 
 Search.search = function (query, max_items) {
   var tokens = Search.internal.tokenizeQuery(query);
+  console.log(tokens);
   var result = Search.internal.getResult(tokens);
   return Search.internal.rankAndFinalize(result, max_items || 20);
 };
 
 Search.internal = {};
 
+// Leaves only numbers and ascii lowercase letters.
+Search.internal.sanitizeWord = function (word) {
+  return word.split("").map(function (letter) {
+    if (letter.match(/[0-9]/)) {
+      return letter;
+    } else {
+      return Search.croatianHelper.toAscii(
+             Search.croatianHelper.toLower(letter));
+    }
+  }).join("");
+};
+
 Search.internal.tokenizeQuery = function (query) {
   return query.split(/\s/)
+    .map(Search.internal.sanitizeWord)
     .filter(function (word) {
       return word.length > 1;
-    })
-    .map(Search.croatianHelper.toAscii)
-    .map(Search.croatianHelper.toLower);
+    });
 };
 
 /**
