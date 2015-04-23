@@ -47,7 +47,9 @@ function finalizeIndex() {
   for (var i = 0; i < result.words_keys.length; ++i) {
     result["words_values"].push(wordsIndex[result.words_keys[i]]);
   }
+  process.stdout.write("Search.data = ");
   process.stdout.write(JSON.stringify(result));
+  process.stdout.write(";\n");
 }
 
 function splitPathParts(id_parts) {

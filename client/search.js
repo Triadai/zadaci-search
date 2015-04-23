@@ -1,9 +1,12 @@
 var Search = Search || {};
 
 Search.search = function (query, max_items) {
+  var t0 = new Date().getTime();
   var tokens = Search.internal.tokenizeQuery(query);
   var result = Search.internal.getResult(tokens);
-  return Search.internal.rankAndFinalize(result, max_items || 20);
+  var ranked = Search.internal.rankAndFinalize(result, max_items || 20);
+  console.log("query took " + (new Date().getTime() - t0) + " ms");
+  return ranked;
 };
 
 Search.internal = {};

@@ -1,4 +1,4 @@
-all: client/search.js
+all: gen/search.js
 
 directory_tree_builder/spreadsheet_parser/_hidden_settings.py:
 	( git submodule init && git submodule update )
@@ -25,15 +25,14 @@ gen/zadaci-words: gen/zadaci-txt txt-to-words.js
 		node txt-to-words.js gen/zadaci-txt/$$i > gen/zadaci-words/$$i;\
 	done
 	
-gen/index.json: gen/zadaci-words build-index.js
-	node build-index.js > gen/index.json
+gen/index.js: gen/zadaci-words build-index.js
+	node build-index.js > gen/index.js
 
-client/search.js: gen/index.json client/search.template.js
-	cat client/search.template.js > client/search.js
+gen/search.js: gen/index.js client/search.js
+	cat client/search.js > gen/search.js
 	cat croatian-helper/lib/croatian-helper.js |\
-		sed 's/module\.exports/Search.croatianHelper/g' >> client/search.js
-	echo "Search.data = " >> client/search.js
-	cat gen/index.json >> client/search.js
+		sed 's/module\.exports/Search.croatianHelper/g' >> gen/search.js
+	cat gen/index.js >> gen/search.js
 
 clean:
 	rm -rf gen client/search.js
