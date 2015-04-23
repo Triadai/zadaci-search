@@ -2,7 +2,6 @@ var Search = Search || {};
 
 Search.search = function (query, max_items) {
   var tokens = Search.internal.tokenizeQuery(query);
-  console.log(tokens);
   var result = Search.internal.getResult(tokens);
   return Search.internal.rankAndFinalize(result, max_items || 20);
 };
