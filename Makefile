@@ -44,4 +44,4 @@ test: gen/search.js
 	node gen/test.js
 
 clean:
-	rm -rf gen client/search.js
+	rm -rf gen
